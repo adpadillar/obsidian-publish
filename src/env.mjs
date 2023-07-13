@@ -8,6 +8,7 @@ export const env = createEnv({
    */
   server: {
     NODE_ENV: z.enum(["development", "test", "production"]),
+    GITHUB_ACCESS_TOKEN: z.string().min(1),
   },
 
   /**
@@ -17,6 +18,8 @@ export const env = createEnv({
    */
   client: {
     // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
+    NEXT_PUBLIC_REPO_OWNER: z.string().min(1),
+    NEXT_PUBLIC_REPO_NAME: z.string().min(1),
   },
 
   /**
@@ -25,6 +28,9 @@ export const env = createEnv({
    */
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
+    GITHUB_ACCESS_TOKEN: process.env.GITHUB_ACCESS_TOKEN,
+    NEXT_PUBLIC_REPO_NAME: process.env.NEXT_PUBLIC_REPO_NAME,
+    NEXT_PUBLIC_REPO_OWNER: process.env.NEXT_PUBLIC_REPO_OWNER,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**

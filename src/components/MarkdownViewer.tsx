@@ -23,35 +23,30 @@ const MarkdownViewer: React.FC<MarkdownViewerProps> = () => {
 
   return (
     <>
-      {fileLoading ? (
-        <LoadingSpinner />
-      ) : (
-        <div className="prose">
-          {file && file.name && <h1>{file.name.replace(".md", "")}</h1>}
-          {data && fileContent ? (
-            <Markdown
-              remarkPlugins={[
-                remarkFrontmatter,
-                remarkGfm,
-                remarkWikiLinks,
-                remarkWikiEmbeds,
-              ]}
-              transformImageUri={(src) => {
-                if (src.startsWith("http")) return src;
+      <div className="prose">
+        {file && file.name && <h1>{file.name.replace(".md", "")}</h1>}
+        <LoadingSpinner loading={fileLoading} />
+        {data && fileContent && !fileLoading && (
+          <Markdown
+            remarkPlugins={[
+              remarkFrontmatter,
+              remarkGfm,
+              remarkWikiLinks,
+              remarkWikiEmbeds,
+            ]}
+            transformImageUri={(src) => {
+              if (src.startsWith("http")) return src;
 
-                const path = findPath(data, decodeURI(src.replace("../", "")));
-                if (!path) return src;
+              const path = findPath(data, decodeURI(src.replace("../", "")));
+              if (!path) return src;
 
-                return path.download_url ?? src;
-              }}
-            >
-              {fileContent}
-            </Markdown>
-          ) : (
-            <p>Select a markdown file</p>
-          )}
-        </div>
-      )}
+              return path.download_url ?? src;
+            }}
+          >
+            {fileContent}
+          </Markdown>
+        )}
+      </div>
     </>
   );
 };

@@ -17,19 +17,17 @@ const Directory: React.FC<DirectoryProps> = ({ directory, className = "" }) => {
     api.githubRouter.mutateContent.useMutation();
 
   return (
-    <div
-      className={`cursor-pointer bg-zinc-100 transition-all hover:bg-zinc-200 ${className}`}
-    >
+    <div className={`cursor-pointer bg-zinc-100 transition-all ${className}`}>
       <div
         onClick={() => {
-          if (data) {
-            return setIsExpanded(!isExpanded);
-          }
-
           mutate({
             path: directory.path,
             recursive: false,
           });
+
+          if (data) {
+            return setIsExpanded(!isExpanded);
+          }
 
           setIsExpanded(!isExpanded);
         }}

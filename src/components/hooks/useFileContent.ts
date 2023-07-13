@@ -16,6 +16,8 @@ const useFileContent = (file?: file) => {
   };
 
   useEffect(() => {
+    setLoading(true);
+
     if (file && file.download_url) {
       fetchFileContent(file.download_url)
         .then((content) => {

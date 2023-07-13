@@ -2,12 +2,14 @@ import {
   type file,
   type fetchGithubPathReturn,
   type directory,
-} from "~/server/api/routers/example";
+} from "~/server/api/routers/github";
 
 const findPath = (
-  content: fetchGithubPathReturn,
+  content: fetchGithubPathReturn | null,
   path: string
 ): file | directory | null => {
+  if (!content) return null;
+
   const pathArray = path.split("/").filter((s) => s !== "");
 
   if (pathArray.length === 0) return null;

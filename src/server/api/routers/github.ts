@@ -12,16 +12,17 @@ export type directory = {
   name: string;
   path: string;
   sha: string;
-  content: fetchGithubPathReturn;
+  content: fetchGithubPathReturn | null;
   download_url: string | null;
+  type: "dir";
 };
 
 export type file = {
   name: string;
   path: string;
   sha: string;
-  content: string | null;
   download_url: string | null;
+  type: "file";
 };
 
 export type fetchGithubPathReturn = {
@@ -30,7 +31,8 @@ export type fetchGithubPathReturn = {
 };
 
 export const fetchGithubPath = async (
-  path: string
+  path: string,
+  recursive: boolean
 ): Promise<fetchGithubPathReturn> => {
   const res = await octokit.repos.getContent({
     owner: env.NEXT_PUBLIC_REPO_OWNER,
@@ -49,31 +51,46 @@ export const fetchGithubPath = async (
           path: directory.path,
           sha: directory.sha,
           download_url: directory.download_url,
-          content: await fetchGithubPath(directory.path),
+          type: "dir",
+          content: recursive
+            ? await fetchGithubPath(directory.path, recursive)
+            : null,
         }))
     ),
-    files: await Promise.all(
-      res.data
-        .filter((file) => file.type === "file")
-        .map(async (file) => ({
-          name: file.name,
-          path: file.path,
-          sha: file.sha,
-          download_url: file.download_url,
-          content:
-            file.download_url && file.path.endsWith(".md")
-              ? await (await fetch(file.download_url)).text()
-              : null,
-        }))
-    ),
+    files: res.data
+      .filter((file) => file.type === "file")
+      .map((file) => ({
+        name: file.name,
+        path: file.path,
+        sha: file.sha,
+        download_url: file.download_url,
+        type: "file",
+      })),
   };
 };
 
-export const exampleRouter = createTRPCRouter({
-  github: publicProcedure
-    .input(z.object({ path: z.string() }))
+export const githubRouter = createTRPCRouter({
+  getContent: publicProcedure
+    .input(
+      z.object({
+        path: z.string(),
+        recursive: z.boolean().optional().default(true),
+      })
+    )
     .query(async ({ input }) => {
-      const res = await fetchGithubPath(input.path);
+      const res = await fetchGithubPath(input.path, input.recursive);
+
+      return res;
+    }),
+  mutateContent: publicProcedure
+    .input(
+      z.object({
+        path: z.string(),
+        recursive: z.boolean().optional().default(true),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const res = await fetchGithubPath(input.path, input.recursive);
 
       return res;
     }),

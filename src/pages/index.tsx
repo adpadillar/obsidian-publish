@@ -1,90 +1,7 @@
 import Head from "next/head";
-import { api } from "~/utils/api";
-
-import React, { useState } from "react";
-import { type file, type directory } from "~/server/api/routers/example";
-import Markdown from "react-markdown";
-import gfm from "remark-gfm";
-import { findPath } from "~/utils/findPath";
-
-interface DirectoryProps {
-  directory: directory;
-  className?: string;
-  onFileClick?: (file: file) => void;
-}
-
-const Directory: React.FC<DirectoryProps> = ({
-  directory,
-  className,
-  onFileClick,
-}) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const { name, content } = directory;
-
-  return (
-    <>
-      <div
-        className={`flex cursor-pointer space-x-2 bg-gray-200 py-1 transition-all hover:bg-gray-300 ${
-          className || ""
-        }`}
-        onClick={() => setIsOpen((o) => !o)}
-      >
-        <p className={`transition-all ${isOpen ? "rotate-90" : "rotate-0"}`}>
-          &gt;
-        </p>
-        <h2>{name}</h2>
-      </div>
-      {isOpen && (
-        <div>
-          {content.directories.map((dir) => (
-            <Directory className="pl-6" key={dir.sha} directory={dir} />
-          ))}
-          {content.files.map((file) => (
-            <File
-              onClick={onFileClick ? () => onFileClick(file) : () => null}
-              className="pl-6"
-              key={file.sha}
-              file={file}
-            />
-          ))}
-        </div>
-      )}
-    </>
-  );
-};
-
-interface FileProps {
-  file: file;
-  className?: string;
-  onClick?: () => void;
-}
-
-const File: React.FC<FileProps> = ({ file, className, onClick }) => {
-  const { name } = file;
-
-  return (
-    <div
-      onClick={onClick}
-      className={`cursor-pointer bg-gray-200 py-1 transition-all hover:bg-gray-300 ${
-        className || ""
-      }`}
-    >
-      <h2>{name}</h2>
-    </div>
-  );
-};
+import FileExplorer from "~/components/FileExplorer";
 
 export default function Home() {
-  const { data, isLoading } = api.example.github.useQuery({ path: "" });
-  const [currentFile, setCurrentFile] = useState<file>();
-
-  const onFileClick = (file: file) => {
-    if (file.path.split(".").pop() !== "md") return;
-
-    setCurrentFile(file);
-  };
-
   return (
     <>
       <Head>
@@ -93,51 +10,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {data && (
-        <main className="flex space-x-4 p-4">
-          {isLoading && <p>Loading...</p>}
-          <div className="w-full max-w-xs overflow-hidden">
-            {data.directories.map((dir) => (
-              <Directory
-                onFileClick={onFileClick}
-                className="px-3"
-                key={dir.sha}
-                directory={dir}
-              />
-            ))}
-            {data.files.map((file) => (
-              <File
-                onClick={() => onFileClick(file)}
-                className="px-3"
-                key={file.sha}
-                file={file}
-              />
-            ))}
-          </div>
-          {currentFile && (
-            <div className="prose">
-              <h1>{currentFile?.name.replace(".md", "")}</h1>
-
-              <Markdown
-                remarkPlugins={[gfm]}
-                transformImageUri={(src) => {
-                  if (src.startsWith("http")) return src;
-
-                  const path = findPath(
-                    data,
-                    decodeURI(src.replace("../", ""))
-                  );
-                  if (!path) return src;
-
-                  return path.download_url ?? src;
-                }}
-              >
-                {currentFile.content || ""}
-              </Markdown>
-            </div>
-          )}
-        </main>
-      )}
+      <FileExplorer />
     </>
   );
 }

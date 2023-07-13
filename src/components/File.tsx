@@ -1,22 +1,23 @@
+import { useFileStore } from "~/pages/_app";
 import { type file } from "~/server/api/routers/github";
 
 interface FileProps {
   file: file;
   className?: string;
-  onClick?: () => void;
 }
 
-const File: React.FC<FileProps> = ({ file, className, onClick }) => {
+const File: React.FC<FileProps> = ({ file, className = "" }) => {
+  const { setFile } = useFileStore();
   const { name } = file;
 
   return (
     <div
-      onClick={onClick}
-      className={`cursor-pointer bg-gray-200 py-1 transition-all hover:bg-gray-300 ${
-        className || ""
-      }`}
+      onClick={() => setFile(file)}
+      className={`cursor-pointer bg-zinc-100 py-1 pr-2 transition-all ${className}`}
     >
-      <h2>{name}</h2>
+      <div className="h-full border border-y-transparent border-l-zinc-300 border-r-transparent pl-4 opacity-70">
+        <p>{name}</p>
+      </div>
     </div>
   );
 };

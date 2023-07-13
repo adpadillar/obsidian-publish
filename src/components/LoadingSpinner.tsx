@@ -1,24 +1,18 @@
-import { api } from "~/utils/api";
-import Directory from "./Directory";
-import File from "./File";
+import React from "react";
 
-interface FileExplorer {
-  path?: string;
+interface LoadingSpinnerProps {
+  children?: React.ReactNode;
+  loading?: boolean;
 }
 
-const FileExplorer: React.FC<FileExplorer> = ({ path = "" }) => {
-  const { data, isLoading } = api.githubRouter.getContent.useQuery({
-    path,
-    recursive: false,
-  });
-
+const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ loading = true }) => {
   return (
-    <div className="sticky top-4 select-none overflow-hidden rounded-md">
-      {isLoading && (
+    <>
+      {loading && (
         <div role="status">
           <svg
             aria-hidden="true"
-            className="mr-2 h-4 w-4 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600"
+            className="h-4 w-4 animate-spin fill-gray-600 text-gray-200"
             viewBox="0 0 100 101"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -35,18 +29,8 @@ const FileExplorer: React.FC<FileExplorer> = ({ path = "" }) => {
           <span className="sr-only">Loading...</span>
         </div>
       )}
-      {data && (
-        <>
-          {data.directories.map((dir) => (
-            <Directory key={dir.sha} directory={dir} />
-          ))}
-          {data.files.map((file) => (
-            <File className="pl-2.5" key={file.sha} file={file} />
-          ))}
-        </>
-      )}
-    </div>
+    </>
   );
 };
 
-export default FileExplorer;
+export default LoadingSpinner;

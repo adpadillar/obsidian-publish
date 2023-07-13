@@ -23,11 +23,18 @@ const MarkdownViewer: React.FC<MarkdownViewerProps> = () => {
 
   return (
     <>
-      <div className="prose">
+      <div className="prose prose-img:w-full">
         {file && file.name && <h1>{file.name.replace(".md", "")}</h1>}
         <LoadingSpinner loading={fileLoading} />
         {data && fileContent && !fileLoading && (
           <Markdown
+            components={{
+              input: ({ ...props }) => (
+                <span className="not-prose pr-1">
+                  <input {...props} />
+                </span>
+              ),
+            }}
             remarkPlugins={[
               remarkFrontmatter,
               remarkGfm,

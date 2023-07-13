@@ -22,6 +22,7 @@
     "react-markdown": "^8.0.7",
     "remark-frontmatter": "^4.0.1",
     "remark-gfm": "^3.0.1",
+    "remark-wikirefs": "0.0.4-rm",
     "superjson": "1.12.2",
     "zod": "^3.21.4",
     "zustand": "^4.3.9"

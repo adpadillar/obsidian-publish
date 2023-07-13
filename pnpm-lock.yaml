@@ -44,6 +44,9 @@ dependencies:
   remark-gfm:
     specifier: ^3.0.1
     version: 3.0.1
+  remark-wikirefs:
+    specifier: 0.0.4-rm
+    version: 0.0.4-rm
   superjson:
     specifier: 1.12.2
     version: 1.12.2
@@ -1275,6 +1278,10 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
+  /escape-mkdn@0.0.3:
+    resolution: {integrity: sha512-c4v1FQEXTpMokLf7GzxSQHoDbcjJdy+YlWIAmGLNhblefN6g4GsLTtxSuD6GkZx2H8FhzMSoPk5zMvwhZRuzOg==}
+    dev: false
+
   /escape-string-regexp@4.0.0:
     resolution: {integrity: sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==}
     engines: {node: '>=10'}
@@ -2212,6 +2219,10 @@ packages:
       p-locate: 5.0.0
     dev: true
 
+  /lodash-es@4.17.21:
+    resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
+    dev: false
+
   /lodash.castarray@4.4.0:
     resolution: {integrity: sha512-aVx8ztPv7/2ULbArGJ2Y42bG1mEQ5mGjpdvrbJcJFU3TbYybe+QlLS4pst9zV52ymy2in1KpFPiZnAOATxD4+Q==}
     dev: true
@@ -2384,6 +2395,19 @@ packages:
       '@types/mdast': 3.0.12
     dev: false
 
+  /mdast-util-wikirefs@0.0.3-md:
+    resolution: {integrity: sha512-2S/7c+O2jKzmvPOBmOnleD3odau5sjL8SqCCxRgOl+tyExqSfnEqZ52LBMOYyRRGJEB4ZU/RpuJTHu3rfHi15Q==}
+    dependencies:
+      lodash-es: 4.17.21
+      mdast-util-from-markdown: 1.3.1
+      mdast-util-to-markdown: 1.5.0
+      micromark-extension-wikirefs: 0.0.3-mm
+      micromark-util-types: 1.1.0
+      wikirefs: 0.0.2
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
   /merge-stream@2.0.0:
     resolution: {integrity: sha512-abv/qOcuPfk3URPfDzmZU1LKmuw8kT+0nIHvKrKgFrwifol/doWcdA4ZqsWQ8ENrFKkd67Mfpo/LovbIUsbt3w==}
     dev: true
@@ -2493,6 +2517,20 @@ packages:
       micromark-extension-gfm-task-list-item: 1.0.5
       micromark-util-combine-extensions: 1.1.0
       micromark-util-types: 1.1.0
+    dev: false
+
+  /micromark-extension-wikirefs@0.0.3-mm:
+    resolution: {integrity: sha512-Vfint2QgMRjus2Jpk1v+pecicpO/bffJMF/LhjO0z9lil62SuoWkCv2bT/hKFSBbMDJ4m6i6Q0fn/1l+eCjpAw==}
+    dependencies:
+      lodash-es: 4.17.21
+      micromark-factory-space: 1.1.0
+      micromark-util-character: 1.2.0
+      micromark-util-chunked: 1.1.0
+      micromark-util-combine-extensions: 1.1.0
+      micromark-util-symbol: 1.1.0
+      micromark-util-types: 1.1.0
+      uvu: 0.5.6
+      wikirefs: 0.0.2
     dev: false
 
   /micromark-factory-destination@1.1.0:
@@ -3253,6 +3291,15 @@ packages:
       unified: 10.1.2
     dev: false
 
+  /remark-wikirefs@0.0.4-rm:
+    resolution: {integrity: sha512-vR37ihVsXviX+NPNbBdbyexRexLF8fvYf1bt0zR81+18xVLPRlkG/EnzA5zUqlYNnWapYY7LJZFbpnycp2oFhQ==}
+    dependencies:
+      mdast-util-wikirefs: 0.0.3-md
+      micromark-extension-wikirefs: 0.0.3-mm
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
   /resolve-from@4.0.0:
     resolution: {integrity: sha512-pb/MYmXstAkysRFx8piNI1tGFNQIFA3vkE3Gq4EuA1dF6gHp/+vgZqsCGJapvy8N3Q+4o7FwvquPJcnZ7RYy4g==}
     engines: {node: '>=4'}
@@ -3810,6 +3857,12 @@ packages:
     dependencies:
       isexe: 2.0.0
     dev: true
+
+  /wikirefs@0.0.2:
+    resolution: {integrity: sha512-G57eZB6VcYmm8umCOYIkmfzX497EEbhtlPwP/qLI+vYYIp4POIlkA67VE+PrYMsVVf5YxQ+QukElAK9hE5VROQ==}
+    dependencies:
+      escape-mkdn: 0.0.3
+    dev: false
 
   /wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}

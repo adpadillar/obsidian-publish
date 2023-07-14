@@ -7,7 +7,7 @@ import { findPath } from "~/utils/findPath";
 import { api } from "~/utils/api";
 import remarkGfm from "remark-gfm";
 import remarkFrontmatter from "remark-frontmatter";
-import { remarkWikiEmbeds, remarkWikiLinks } from "remark-wikirefs";
+import { remarkWikiLinks } from "remark-wikirefs";
 
 interface MarkdownViewerProps {
   children?: React.ReactNode;
@@ -35,16 +35,13 @@ const MarkdownViewer: React.FC<MarkdownViewerProps> = () => {
                 </span>
               ),
             }}
-            remarkPlugins={[
-              remarkFrontmatter,
-              remarkGfm,
-              remarkWikiLinks,
-              remarkWikiEmbeds,
-            ]}
+            remarkPlugins={[remarkFrontmatter, remarkGfm, remarkWikiLinks]}
             transformImageUri={(src) => {
+              const path = findPath(data, decodeURI(src.replace("../", "")));
+              console.log(path, src);
+
               if (src.startsWith("http")) return src;
 
-              const path = findPath(data, decodeURI(src.replace("../", "")));
               if (!path) return src;
 
               return path.download_url ?? src;

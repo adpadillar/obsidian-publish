@@ -37,7 +37,7 @@ const MarkdownViewer: React.FC<MarkdownViewerProps> = () => {
             }}
             remarkPlugins={[remarkFrontmatter, remarkGfm, remarkWikiLinks]}
             transformImageUri={(src) => {
-              const path = findPath(data, decodeURI(src.replace("../", "")));
+              const path = findPath(data, decodeURI(src.replaceAll("../", "")));
 
               if (src.startsWith("http")) return src;
 
